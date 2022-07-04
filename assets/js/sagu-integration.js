@@ -3,9 +3,9 @@ $(() => {
         const remodalInstance = $('[data-remodal-id=modal-exported-students]').remodal()
         remodalInstance.open()
 
-        $.get(`/sagu-integration/selectedStudentData/${this.dataset.opportunityId}`, response => {
-            $('[selected-students-table-wrapper]').html(renderSelectedStudentsTable(response))
-            console.log('response', response)
+        $.get(`/sagu-integration/selectedStudentData/${this.dataset.opportunityId}`, students => {
+            $('[selected-students-table-wrapper]').html(renderSelectedStudentsTable(students))
+            console.log('students', students)
         })
     })
 })
@@ -15,6 +15,7 @@ const renderSelectedStudentsTable = students => {
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>Inscrição</th>
                     <th>Nome</th>
                     <th>Status</th>
                 </tr>
@@ -23,6 +24,7 @@ const renderSelectedStudentsTable = students => {
                 ${students.map(student => {
                     return `
                         <tr>
+                            <td>on-${student.data.registration_number}</td>
                             <td>${student.data.nome}</td>
                             <td>${handleExportedStudentStatus(student.status)}</td>
                         </tr>
