@@ -5,7 +5,6 @@ $(() => {
 
         $.get(`/sagu-integration/selectedStudentData/${this.dataset.opportunityId}`, students => {
             $('[selected-students-table-wrapper]').html(renderSelectedStudentsTable(students))
-            console.log('students', students)
         })
     })
 })
@@ -24,7 +23,7 @@ const renderSelectedStudentsTable = students => {
                 ${students.map(student => {
                     return `
                         <tr>
-                            <td>on-${student.data.registration_number}</td>
+                            <td>on-${student.registration_number}</td>
                             <td>${student.data.nome}</td>
                             <td>${handleExportedStudentStatus(student.status)}</td>
                         </tr>

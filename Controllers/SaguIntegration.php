@@ -10,7 +10,7 @@ use GuzzleHttp\Exception\ClientException;
 use MapasCulturais\App;
 
 class SaguIntegration extends \MapasCulturais\Controller {
-    protected $infos = [];
+    private $infos = [];
 
     public function GET_selectedStudentData()
     {
@@ -25,14 +25,14 @@ class SaguIntegration extends \MapasCulturais\Controller {
             $this->mountDataSelectedStudents($agent_metas);
 
             $students["data"] = $this->infos;
-            $students["data"]["registration_number"] = $registration->id;
+            $students["registration_number"] = $registration->id;
 
             try {
-                $client = new Client(['base_uri' => 'http://10.17.40.112:8085/']);
+                $client = new Client(['base_uri' => env('BASE_URI_SAGU')]);
 
                 $options = [
                     'headers' => [
-                        'x-api-key' => '00C3B942F5A3C303021898B25DF44A1941C079F499FE45AB2BA04E1928083967BF387B588DED1D6B3C6CB2D0BA55E139FB4C3D35E448D58BB401D7528FC19315'
+                        'x-api-key' => env('X_API_KEY_SAGU')
                     ],
                     'json' => $this->infos
                 ];
@@ -94,8 +94,10 @@ class SaguIntegration extends \MapasCulturais\Controller {
                     $this->infos["telefoneResidencial"] = $agent_meta->value;
                     break;
                 case 'genero':
-                    $this->infos["sexo"] = $agent_meta->value;
+                    $this->infos["sexo"] = $agent_meta->value[0];
                     break;
+                default:
+                    $this->infos["estadoCivil"] = "N";
             }
         }
     }
