@@ -9,8 +9,10 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use MapasCulturais\App;
 
-class SaguIntegration extends \MapasCulturais\Controller {
+class SaguIntegration extends \MapasCulturais\Controller
+{
     private $infos = [];
+    private $registration_id;
 
     public function GET_selectedStudentData()
     {
@@ -20,12 +22,13 @@ class SaguIntegration extends \MapasCulturais\Controller {
         $agents = [];
 
         foreach ($registrations as $registration) {
+            $this->registration_id = $registration->id;
             $agent_metas = $app->repo('AgentMeta')->findBy(['owner' => $registration->owner->id]);
 
             $this->mountDataSelectedStudents($agent_metas);
 
             $students["data"] = $this->infos;
-            $students["registration_number"] = $registration->id;
+            $students["registration_number"] = $registration->number;
 
             try {
                 $client = new Client(['base_uri' => env('BASE_URI_SAGU')]);
@@ -52,7 +55,7 @@ class SaguIntegration extends \MapasCulturais\Controller {
     private function mountDataSelectedStudents($agent_metas)
     {
         foreach ($agent_metas as $agent_meta) {
-            switch($agent_meta->key) {
+            switch ($agent_meta->key) {
                 case 'nomeCompleto':
                     $this->infos["nome"] = $agent_meta->value;
                     break;
@@ -70,7 +73,7 @@ class SaguIntegration extends \MapasCulturais\Controller {
                     $this->infos["dataNascimento"] = $date->format('Y-m-d');
                     break;
                 case 'En_CEP':
-                    $this->infos["endereco"]["cep"] = str_replace("-", "" ,$agent_meta->value);
+                    $this->infos["endereco"]["cep"] = str_replace("-", "", $agent_meta->value);
                     break;
                 case 'En_Nome_Logradouro':
                     $this->infos["endereco"]["logradouro"] = $agent_meta->value;
@@ -97,8 +100,19 @@ class SaguIntegration extends \MapasCulturais\Controller {
                     $this->infos["sexo"] = $agent_meta->value[0];
                     break;
                 default:
+                    $this->setProfessionalCategory();
                     $this->infos["estadoCivil"] = "N";
             }
         }
+    }
+
+    private function setProfessionalCategory()
+    {
+        $app = App::i();
+        $opportunity_id = intval($this->data["id"]);
+        $rfc = $app->repo('RegistrationFieldConfiguration')->findOneBy(['owner' => $opportunity_id, 'title' => 'Formação Profissional']);
+        $rm = $app->repo('RegistrationMeta')->findOneBy(['owner' => $this->registration_id, 'key' => "field_$rfc->id"]);
+
+        $this->infos["categoriaProfissional"] = $rm->value;
     }
 }

@@ -23,7 +23,7 @@ const renderSelectedStudentsTable = students => {
                 ${students.map(student => {
                     return `
                         <tr>
-                            <td>on-${student.registration_number}</td>
+                            <td>${student.registration_number}</td>
                             <td>${student.data.nome}</td>
                             <td>${handleExportedStudentStatus(student.status)}</td>
                         </tr>
