@@ -8,6 +8,7 @@ use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use MapasCulturais\App;
+use MapasCulturais\Entities\Registration;
 
 class SaguIntegration extends \MapasCulturais\Controller
 {
@@ -18,7 +19,7 @@ class SaguIntegration extends \MapasCulturais\Controller
     {
         $app = App::i();
         $opportunity_id = intval($this->data["id"]);
-        $registrations = $app->repo('Registration')->findBy(['opportunity' => $opportunity_id, 'status' => 10]);
+        $registrations = $app->repo('Registration')->findBy(['opportunity' => $opportunity_id, 'status' => Registration::STATUS_APPROVED]);
         $agents = [];
 
         foreach ($registrations as $registration) {
