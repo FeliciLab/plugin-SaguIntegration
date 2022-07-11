@@ -25,3 +25,28 @@
 [selected-students-table] td:not(:last-child) {
     border-right: 1px solid #eee;
 }
+
+.badge-pill {
+    color: #fff;
+    padding-right: 0.6em;
+    padding-left: 0.6em;
+    border-radius: 10rem;
+    font-size: 0.7rem;
+}
+
+.badge-success {
+    background-color: #28a745;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+}
+
+[data-remodal-id="modal-exported-students"] {
+    overflow: auto;
+    max-height: 700px;
+}

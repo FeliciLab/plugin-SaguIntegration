@@ -48,11 +48,11 @@ const renderSelectedStudentsTable = students => {
 const handleExportedStudentStatus = status => {
     switch(status) {
         case 400:
-            return '<span>Já possui cadastro no Sagu</span>'
+            return '<span class="badge-pill badge-info">Já possui cadastro no Sagu</span>'
         case 500:
-            return '<span>Não foi possível exportar pessoa</span>'
+            return '<span class="badge-pill badge-danger">Não foi possível exportar pessoa</span>'
         default:
-            return '<span>Exportado com sucesso</span>'
+            return '<span class="badge-pill badge-success">Exportado com sucesso</span>'
     }
 }
 
