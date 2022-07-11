@@ -3,3 +3,25 @@
     background-color: #337ab7;
     border-color: #2e6da4;
 }
+
+.export-sagu-data-btn:hover {
+    color: white;
+    background-color: #286090;
+    border-color: #204d74;
+}
+
+.d-none {
+    display: none;
+}
+
+.student-export-alert {
+    z-index: 10000 !important;
+}
+
+.student-export-alert .swal2-html-container {
+    margin: 1.1em 1em 0em !important;
+}
+
+[selected-students-table] td:not(:last-child) {
+    border-right: 1px solid #eee;
+}

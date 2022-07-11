@@ -1,17 +1,28 @@
 $(() => {
     $('[export-students-btn]').on('click', function() {
         const remodalInstance = $('[data-remodal-id=modal-exported-students]').remodal()
+        const options = { icon: 'info', text: 'Aguarde! Os dados estão sendo exportados.'}
+
         remodalInstance.open()
+        $('[selected-students-table]').remove()
+        $('[selected-students-table-wrapper] img').removeClass()
+
+        showSweetAlert(options)
 
         $.get(`/sagu-integration/selectedStudentData/${this.dataset.opportunityId}`, students => {
-            $('[selected-students-table-wrapper]').html(renderSelectedStudentsTable(students))
+            const options = { icon: 'success', text: 'Dados exportados com sucesso'}
+
+            $('[selected-students-table-wrapper] img').addClass('d-none')
+            $('[selected-students-table-wrapper]').append(renderSelectedStudentsTable(students))
+
+            showSweetAlert(options)
         })
     })
 })
 
 const renderSelectedStudentsTable = students => {
     return `
-        <table class="table table-bordered">
+        <table class="table table-bordered" selected-students-table>
             <thead>
                 <tr>
                     <th>Inscrição</th>
@@ -43,4 +54,18 @@ const handleExportedStudentStatus = status => {
         default:
             return '<span>Exportado com sucesso</span>'
     }
+}
+
+const showSweetAlert = options => {
+    Swal.fire({
+        position: 'top-end',
+        toast: true,
+        icon: options.icon,
+        text: options.text,
+        showConfirmButton: false,
+        timer: 4000,
+        customClass: {
+            container: 'student-export-alert'
+        }
+    })
 }
