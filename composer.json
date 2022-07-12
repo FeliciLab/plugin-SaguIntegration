@@ -1,0 +1,12 @@
+{
+    "name": "plugin/sagu-integration",
+    "authors": [
+        {
+            "name": "Jefferson Oliveira",
+            "email": "jeff.doliveira1@outlook.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.0"
+    }
+}
