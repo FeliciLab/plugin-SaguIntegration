@@ -1,0 +1,222 @@
+{
+    "files": [],
+    "fields": [
+        {
+            "id": 2927,
+            "ownerId": 285,
+            "title": "Forma\u00e7\u00e3o Profissional",
+            "description": "Selecione sua forma\u00e7\u00e3o profissional",
+            "maxSize": 0,
+            "required": true,
+            "fieldType": "select",
+            "fieldOptions": [
+                "Advogado",
+                "Atendente",
+                "Agente Comunit\u00e1rio de Endemias (ACE)",
+                "Agente Comunit\u00e1rio de Sa\u00fade",
+                "Assistente Social",
+                "Auxiliar de Enfermagem",
+                "Dentista",
+                "Educador F\u00edsico",
+                "Enfermeiro",
+                "Farmac\u00eautico",
+                "Fisioterapeuta",
+                "Maqueiro",
+                "M\u00e9dico",
+                "Motorista",
+                "Nutricionista",
+                "Pedagogo",
+                "Promotor",
+                "Psic\u00f3logo",
+                "Recepcionista",
+                "T\u00e9cnico de Enfermagem",
+                "T\u00e9cnico em Sa\u00fade Bucal",
+                "T\u00e9cnico em Radiologia",
+                "Terapeuta Ocupacional",
+                "Outros"
+            ],
+            "config": [],
+            "categories": [],
+            "fieldName": "field_2927",
+            "displayOrder": 10
+        },
+        {
+            "id": 2915,
+            "ownerId": 285,
+            "title": "Sexo",
+            "description": "Informe seu sexo",
+            "maxSize": 0,
+            "required": true,
+            "fieldType": "agent-owner-field",
+            "fieldOptions": [
+                "Masculino",
+                "Feminino"
+            ],
+            "config": {
+                "entityField": "genero"
+            },
+            "categories": [],
+            "fieldName": "field_2915",
+            "displayOrder": 9
+        },
+        {
+            "id": 2914,
+            "ownerId": 285,
+            "title": "Telefone residencial",
+            "description": "Informe seu n\u00famero residencial",
+            "maxSize": 0,
+            "required": false,
+            "fieldType": "agent-owner-field",
+            "fieldOptions": [
+                ""
+            ],
+            "config": {
+                "entityField": "telefone2"
+            },
+            "categories": [],
+            "fieldName": "field_2914",
+            "displayOrder": 8
+        },
+        {
+            "id": 2913,
+            "ownerId": 285,
+            "title": "Celular",
+            "description": "Informe seu celular",
+            "maxSize": 0,
+            "required": true,
+            "fieldType": "agent-owner-field",
+            "fieldOptions": [
+                ""
+            ],
+            "config": {
+                "entityField": "telefone1"
+            },
+            "categories": [],
+            "fieldName": "field_2913",
+            "displayOrder": 7
+        },
+        {
+            "id": 2912,
+            "ownerId": 285,
+            "title": "Endere\u00e7o",
+            "description": "Informe seu endere\u00e7o atual",
+            "maxSize": 0,
+            "required": true,
+            "fieldType": "agent-owner-field",
+            "fieldOptions": [
+                ""
+            ],
+            "config": {
+                "entityField": "@location",
+                "setLatLon": ""
+            },
+            "categories": [],
+            "fieldName": "field_2912",
+            "displayOrder": 6
+        },
+        {
+            "id": 2911,
+            "ownerId": 285,
+            "title": "Data de nascimento",
+            "description": "Selecione sua data de nascimento",
+            "maxSize": 0,
+            "required": true,
+            "fieldType": "agent-owner-field",
+            "fieldOptions": [
+                ""
+            ],
+            "config": {
+                "entityField": "dataDeNascimento"
+            },
+            "categories": [],
+            "fieldName": "field_2911",
+            "displayOrder": 5
+        },
+        {
+            "id": 2910,
+            "ownerId": 285,
+            "title": "CPF",
+            "description": "Digite seu CPF",
+            "maxSize": 0,
+            "required": true,
+            "fieldType": "agent-owner-field",
+            "fieldOptions": [
+                ""
+            ],
+            "config": {
+                "entityField": "documento"
+            },
+            "categories": [],
+            "fieldName": "field_2910",
+            "displayOrder": 4
+        },
+        {
+            "id": 2909,
+            "ownerId": 285,
+            "title": "RG\/Identidade",
+            "description": "Digite seu RG\/Identidade",
+            "maxSize": 0,
+            "required": true,
+            "fieldType": "agent-owner-field",
+            "fieldOptions": [
+                ""
+            ],
+            "config": {
+                "entityField": "rg"
+            },
+            "categories": [],
+            "fieldName": "field_2909",
+            "displayOrder": 3
+        },
+        {
+            "id": 2908,
+            "ownerId": 285,
+            "title": "E-mail",
+            "description": "Digite seu e-mail",
+            "maxSize": 0,
+            "required": true,
+            "fieldType": "agent-owner-field",
+            "fieldOptions": [
+                ""
+            ],
+            "config": {
+                "entityField": "emailPrivado"
+            },
+            "categories": [],
+            "fieldName": "field_2908",
+            "displayOrder": 2
+        },
+        {
+            "id": 2907,
+            "ownerId": 285,
+            "title": "Nome completo",
+            "description": "Digite seu nome completo",
+            "maxSize": 0,
+            "required": true,
+            "fieldType": "agent-owner-field",
+            "fieldOptions": [
+                ""
+            ],
+            "config": {
+                "entityField": "nomeCompleto"
+            },
+            "categories": [],
+            "fieldName": "field_2907",
+            "displayOrder": 1
+        }
+    ],
+    "meta": {
+        "registrationCategories": [
+            "Aluno"
+        ],
+        "useAgentRelationColetivo": "dontUse",
+        "registrationLimitPerOwner": "1",
+        "registrationCategDescription": "Selecione uma categoria",
+        "registrationCategTitle": "Categoria",
+        "useAgentRelationInstituicao": "dontUse",
+        "introInscricoes": null,
+        "useSpaceRelationIntituicao": null,
+        "registrationSeals": null,
+        "registrationLimit": "0"
+    }
+}
