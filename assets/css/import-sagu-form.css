@@ -1,0 +1,21 @@
+.btn-import-form-sagu {
+    margin: 0;
+    vertical-align: top;
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.btn-import-form-sagu:hover {
+    color: #fff;
+    background-color: #23272b;
+    border-color: #1d2124;
+}
+
+.imported-form-alert {
+    z-index: 10000 !important;
+}
+
+.imported-form-alert .swal2-html-container {
+    margin: 1.1em 1em 0em !important;
+}
