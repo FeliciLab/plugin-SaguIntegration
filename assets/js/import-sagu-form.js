@@ -1,12 +1,8 @@
 $(() => {
-    const formImportFields = $('#registration-attachments').find('form[name="impotFields"]')
-    // Pega o id da oportunidade presente na url
-    const opportunityId = formImportFields.context.referrer.replace(/\D/g, '')
-
-    formImportFields.append(renderSaguFormImportBtn())
+    handleSaguFormImportBtn()
 
     $('#import-btn').on('click', () => {
-        $.post('/sagu-integration/importForm', { opportunity_id: opportunityId }, () => {
+        $.post('/sagu-integration/importForm', { opportunity_id: MapasCulturais.entity.id }, () => {
             Swal.fire({
                 position: 'top-end',
                 toast: true,
@@ -25,6 +21,12 @@ $(() => {
         })
     })
 })
+
+const handleSaguFormImportBtn = () => {
+    const formImportFields = $('#registration-attachments').find('form[name="impotFields"]')
+
+    formImportFields.append(renderSaguFormImportBtn())
+}
 
 const renderSaguFormImportBtn = () => {
     return `
