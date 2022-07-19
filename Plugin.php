@@ -21,6 +21,12 @@ class Plugin extends \MapasCulturais\Plugin
                 $this->part('singles/sagu-mapadasaude-export--button', ['opportunity_id' => $entity->id]);
             }
         });
+
+        // Insere botão de importação do formulário do Sagu
+        $app->hook('template(opportunity.edit.registration-config):begin', function () use ($app) {
+            $app->view->enqueueScript('app', 'import_sagu_default_form', 'js/import-sagu-form.js');
+            $app->view->enqueueStyle('app', 'import_sagu_default_form', 'css/import-sagu-form.css');
+        });
     }
 
     public function register()

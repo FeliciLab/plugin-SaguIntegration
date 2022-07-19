@@ -116,4 +116,15 @@ class SaguIntegration extends \MapasCulturais\Controller
 
         $this->infos["categoriaProfissional"] = $rm->value;
     }
+
+    public function POST_importForm()
+    {
+        $app = App::i();
+        $opportunity_id = intval($this->data["opportunity_id"]);
+        $opportunity = $app->repo("Opportunity")->find($opportunity_id);
+        $json = file_get_contents(PLUGINS_PATH . 'SaguIntegration/assets/js/sagu-form-fields.json');
+        $form_fields = json_decode($json);
+
+        $opportunity->importFields($form_fields);
+    }
 }

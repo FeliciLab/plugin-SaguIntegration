@@ -1,7 +1,7 @@
 $(() => {
-    $('[export-students-btn]').on('click', function() {
+    $('[export-students-btn]').on('click', function () {
         const remodalInstance = $('[data-remodal-id=modal-exported-students]').remodal()
-        const options = { icon: 'info', text: 'Aguarde! Os dados estão sendo exportados.'}
+        const options = { icon: 'info', text: 'Aguarde! Os dados estão sendo exportados.' }
 
         remodalInstance.open()
         $('[selected-students-table]').remove()
@@ -10,7 +10,7 @@ $(() => {
         showSweetAlert(options)
 
         $.get(`/sagu-integration/selectedStudentData/${this.dataset.opportunityId}`, students => {
-            const options = { icon: 'success', text: 'Dados exportados com sucesso'}
+            const options = { icon: 'success', text: 'Dados exportados com sucesso' }
 
             $('[selected-students-table-wrapper] img').addClass('d-none')
             $('[selected-students-table-wrapper]').append(renderSelectedStudentsTable(students))
@@ -46,7 +46,7 @@ const renderSelectedStudentsTable = students => {
 }
 
 const handleExportedStudentStatus = status => {
-    switch(status) {
+    switch (status) {
         case 400:
             return '<span class="badge-pill badge-info">Já possui cadastro no Sagu</span>'
         case 500:
