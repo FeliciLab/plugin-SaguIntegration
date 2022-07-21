@@ -50,3 +50,15 @@
     overflow: auto;
     max-height: 700px;
 }
+
+.enroll-students-btn {
+    color: white;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.enroll-students-btn:hover {
+    color: white;
+    background-color: #23272b;
+    border-color: #1d2124;
+}

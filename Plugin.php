@@ -18,7 +18,7 @@ class Plugin extends \MapasCulturais\Plugin
                 $app->view->enqueueScript('app', 'sagu_integration', 'js/sagu-integration.js');
                 $app->view->enqueueStyle('app', 'sagu_integration', 'css/sagu-integration.css');
 
-                $this->part('singles/sagu-mapadasaude-export--button', ['opportunity_id' => $entity->id]);
+                $this->part('singles/sagu-mapadasaude-export');
             }
         });
 

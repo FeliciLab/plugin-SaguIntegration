@@ -1,5 +1,5 @@
 $(() => {
-    $('[export-students-btn]').on('click', function () {
+    $('[export-students-btn]').on('click', () => {
         const remodalInstance = $('[data-remodal-id=modal-exported-students]').remodal()
         const options = { icon: 'info', text: 'Aguarde! Os dados estão sendo exportados.' }
 
@@ -9,7 +9,7 @@ $(() => {
 
         showSweetAlert(options)
 
-        $.get(`/sagu-integration/selectedStudentData/${this.dataset.opportunityId}`, students => {
+        $.get(`/sagu-integration/selectedStudentData/${MapasCulturais.entity.id}`, students => {
             const options = { icon: 'success', text: 'Dados exportados com sucesso' }
 
             $('[selected-students-table-wrapper] img').addClass('d-none')
@@ -17,6 +17,12 @@ $(() => {
 
             showSweetAlert(options)
         })
+    })
+
+    $('[enroll-students-btn]').on('click', () => {
+        const remodalInstance = $('[data-remodal-id=modal-enroll-students]').remodal()
+
+        remodalInstance.open()
     })
 })
 

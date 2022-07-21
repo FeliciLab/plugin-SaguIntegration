@@ -20,7 +20,6 @@ class SaguIntegration extends \MapasCulturais\Controller
         $app = App::i();
         $opportunity_id = intval($this->data["id"]);
         $registrations = $app->repo('Registration')->findBy(['opportunity' => $opportunity_id, 'status' => Registration::STATUS_APPROVED]);
-        $agents = [];
 
         foreach ($registrations as $registration) {
             $this->registration_id = $registration->id;
@@ -47,7 +46,7 @@ class SaguIntegration extends \MapasCulturais\Controller
                 $students["status"] = $e->getResponse()->getStatusCode();
             }
 
-            array_push($agents, $students);
+            $agents[] = $students;
         }
 
         $this->json($agents);
