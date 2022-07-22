@@ -34,5 +34,6 @@ class Plugin extends \MapasCulturais\Plugin
         $app = App::i();
 
         $app->registerController('sagu-integration', Controllers\SaguIntegration::class);
+        $app->registerController('student-enrollment', Controllers\EnsinoPesquisaExtensao\StudentEnrollment::class);
     }
 }

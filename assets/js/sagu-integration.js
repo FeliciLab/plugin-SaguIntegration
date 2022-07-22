@@ -23,6 +23,22 @@ $(() => {
         const remodalInstance = $('[data-remodal-id=modal-enroll-students]').remodal()
 
         remodalInstance.open()
+
+        $.get('/student-enrollment/coursesOffered', courses => {
+            $('#select-course').append(renderStudentEnrollmentOpts(courses))
+        })
+
+        $('#select-course, #select-class').select2({
+            placeholder: "Selecione"
+        })
+    })
+
+    $('#select-course').on('change', event => {
+        const courseId = event.val
+
+        $.get(`/student-enrollment/activeClassesByCourses/${courseId}`, classes => {
+            $('#select-class').append(renderStudentEnrollmentOpts(classes))
+        })
     })
 })
 
@@ -74,4 +90,8 @@ const showSweetAlert = options => {
             container: 'student-export-alert'
         }
     })
+}
+
+const renderStudentEnrollmentOpts = options => {
+    return options.map(option => `<option value="${option.id}">${option.descricao}</option>`).join()
 }
