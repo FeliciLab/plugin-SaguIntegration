@@ -1,3 +1,13 @@
+const enrollStudent = {
+    openEnrollmentModal: false,
+    restartSelectClass() {
+        $('#select-class').html('<option selected disabled>Selecione</option>')
+    },
+    renderStudentEnrollmentOpts(options) {
+        return options.map(option => `<option value="${option.id}">${option.descricao}</option>`).join()
+    }
+}
+
 $(() => {
     $('[export-students-btn]').on('click', () => {
         const remodalInstance = $('[data-remodal-id=modal-exported-students]').remodal()
@@ -20,15 +30,17 @@ $(() => {
     })
 
     $('[enroll-students-btn]').on('click', () => {
+        enrollStudent.openEnrollmentModal = true
         const remodalInstance = $('[data-remodal-id=modal-enroll-students]').remodal()
 
         remodalInstance.open()
+        $('#select-course #select-course-opt').nextAll().remove()
 
         $.get('/student-enrollment/coursesOffered', courses => {
-            $('#select-course').append(renderStudentEnrollmentOpts(courses))
+            $('#select-course').append(enrollStudent.renderStudentEnrollmentOpts(courses))
         })
 
-        $('#select-course, #select-class').select2({
+        $('#select-course').select2({
             placeholder: "Selecione"
         })
     })
@@ -36,9 +48,22 @@ $(() => {
     $('#select-course').on('change', event => {
         const courseId = event.val
 
+        enrollStudent.restartSelectClass()
+
         $.get(`/student-enrollment/activeClassesByCourses/${courseId}`, classes => {
-            $('#select-class').append(renderStudentEnrollmentOpts(classes))
+            $('#select-class').append(enrollStudent.renderStudentEnrollmentOpts(classes))
         })
+    })
+
+    $(window).on('click', () => {
+        const select2DropdownOpen = $('.modal-enroll-students .select-course').hasClass('select2-dropdown-open')
+
+        if (enrollStudent.openEnrollmentModal && select2DropdownOpen) $('#select-course').select2('close')
+    })
+
+    $(document).on('closed', '.remodal', () => {
+        enrollStudent.openEnrollmentModal = false
+        enrollStudent.restartSelectClass()
     })
 })
 
@@ -90,8 +115,4 @@ const showSweetAlert = options => {
             container: 'student-export-alert'
         }
     })
-}
-
-const renderStudentEnrollmentOpts = options => {
-    return options.map(option => `<option value="${option.id}">${option.descricao}</option>`).join()
 }
