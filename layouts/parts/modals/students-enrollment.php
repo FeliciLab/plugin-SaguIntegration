@@ -28,7 +28,7 @@
         <button type="button" data-remodal-action="close" class="btn btn-default">
             <?php \MapasCulturais\i::_e("Cancelar"); ?>
         </button>
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary" id="btn-enroll-students-sagu">
             <?php \MapasCulturais\i::_e("Matricular alunos"); ?>
         </button>
     </div>

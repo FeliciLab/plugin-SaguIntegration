@@ -36,7 +36,7 @@ $(() => {
         remodalInstance.open()
         $('#select-course #select-course-opt').nextAll().remove()
 
-        $.get('/student-enrollment/coursesOffered', courses => {
+        $.get(`/student-enrollment/coursesOffered/${MapasCulturais.entity.id}`, courses => {
             $('#select-course').append(enrollStudent.renderStudentEnrollmentOpts(courses))
         })
 
@@ -47,10 +47,14 @@ $(() => {
 
     $('#select-course').on('change', event => {
         const courseId = event.val
+        const data = {
+            courseId,
+            opportunityId: MapasCulturais.entity.id
+        }
 
         enrollStudent.restartSelectClass()
 
-        $.get(`/student-enrollment/activeClassesByCourses/${courseId}`, classes => {
+        $.post('/student-enrollment/activeClassesByCourses', data, classes => {
             $('#select-class').append(enrollStudent.renderStudentEnrollmentOpts(classes))
         })
     })
@@ -64,6 +68,17 @@ $(() => {
     $(document).on('closed', '.remodal', () => {
         enrollStudent.openEnrollmentModal = false
         enrollStudent.restartSelectClass()
+    })
+
+    $('#btn-enroll-students-sagu').on('click', () => {
+        const data = {
+            classId: $('#select-class').val(),
+            opportunityId: MapasCulturais.entity.id
+        }
+
+        $.post('/student-enrollment/enrolledStudents', data, enrolledStudents => {
+            // 
+        })
     })
 })
 
