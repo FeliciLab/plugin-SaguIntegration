@@ -1,5 +1,6 @@
 const enrollStudent = {
     openEnrollmentModal: false,
+    remodalInstance: null,
     restartSelectClass() {
         $('#select-class').html('<option selected disabled>Selecione</option>')
     },
@@ -11,7 +12,7 @@ const enrollStudent = {
 $(() => {
     $('[export-students-btn]').on('click', () => {
         const remodalInstance = $('[data-remodal-id=modal-exported-students]').remodal()
-        const options = { icon: 'info', text: 'Aguarde! Os dados estão sendo exportados.' }
+        const options = { icon: 'info', text: 'Aguarde! Os dados estão sendo exportados' }
 
         remodalInstance.open()
         $('[selected-students-table]').remove()
@@ -31,9 +32,9 @@ $(() => {
 
     $('[enroll-students-btn]').on('click', () => {
         enrollStudent.openEnrollmentModal = true
-        const remodalInstance = $('[data-remodal-id=modal-enroll-students]').remodal()
+        enrollStudent.remodalInstance = $('[data-remodal-id=modal-enroll-students]').remodal()
 
-        remodalInstance.open()
+        enrollStudent.remodalInstance.open()
         $('#select-course #select-course-opt').nextAll().remove()
 
         $.get(`/student-enrollment/coursesOffered/${MapasCulturais.entity.id}`, courses => {
@@ -65,40 +66,64 @@ $(() => {
         if (enrollStudent.openEnrollmentModal && select2DropdownOpen) $('#select-course').select2('close')
     })
 
-    $(document).on('closed', '.remodal', () => {
+    $(document).on('closed', '.modal-enroll-students', () => {
         enrollStudent.openEnrollmentModal = false
+        enrollStudent.remodalInstance = null
+
         enrollStudent.restartSelectClass()
     })
 
     $('#btn-enroll-students-sagu').on('click', () => {
+        const isEnrollment = true
+        const remodalInstance = $('[data-remodal-id=modal-enrolled-students]').remodal()
+        const options = { icon: 'info', text: 'Aguarde! Os dados estão sendo enviados' }
         const data = {
             classId: $('#select-class').val(),
             opportunityId: MapasCulturais.entity.id
         }
 
+        showSweetAlert(options)
+
+        enrollStudent.remodalInstance.close()
+        enrollStudent.restartSelectClass()
+        $('[selected-students-table]').remove()
+        $('.modal-enrolled-students .export-infos-wrapper').addClass('d-none')
+        $('[enrolled-students-wrapper] img').removeClass()
+        remodalInstance.open()
+
         $.post('/student-enrollment/enrolledStudents', data, enrolledStudents => {
-            // 
+            const options = { icon: 'success', text: 'Matrículas enviadas com sucesso' }
+
+            showSweetAlert(options)
+
+            $('[enrolled-students-wrapper] img').addClass('d-none')
+            $('[enrolled-students-wrapper]').append(renderSelectedStudentsTable(enrolledStudents, isEnrollment))
+            $('.modal-enrolled-students .export-infos-wrapper').removeClass('d-none')
+
+            setStatusAmounts(enrolledStudents)
         })
     })
 })
 
-const renderSelectedStudentsTable = students => {
+const renderSelectedStudentsTable = (students, isEnrollment = false) => {
     return `
         <table class="table table-bordered" selected-students-table>
             <thead>
                 <tr>
-                    <th>Inscrição</th>
                     <th>Nome</th>
+                    <th>CPF</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 ${students.map(student => {
+                    const status = isEnrollment ? student.registration_status : student.export_status
+
                     return `
                         <tr>
-                            <td>${student.registration_number}</td>
                             <td>${student.data.nome}</td>
-                            <td>${handleExportedStudentStatus(student.status)}</td>
+                            <td>${student.data.cpf}</td>
+                            <td>${handleExportedStudentStatus(status, isEnrollment)}</td>
                         </tr>
                     `
                 }).join('')}
@@ -107,14 +132,26 @@ const renderSelectedStudentsTable = students => {
     `
 }
 
-const handleExportedStudentStatus = status => {
+const handleExportedStudentStatus = (status, isEnrollment) => {
     switch (status) {
         case 400:
-            return '<span class="badge-pill badge-info">Já possui cadastro no Sagu</span>'
+            return `
+                <span class="badge-pill badge-info">
+                    ${isEnrollment ? 'Aluno já matriculado na turma' : 'Já possui cadastro no Sagu'}
+                </span>
+            `
         case 500:
-            return '<span class="badge-pill badge-danger">Não foi possível exportar pessoa</span>'
+            return `
+                <span class="badge-pill badge-danger">
+                    ${isEnrollment ? 'Não foi possível matricular o aluno' : 'Não foi possível exportar pessoa'}
+                </span>
+            `
         default:
-            return '<span class="badge-pill badge-success">Exportado com sucesso</span>'
+            return `
+                <span class="badge-pill badge-success">
+                    ${isEnrollment ? 'Matriculado com sucesso' : 'Exportado com sucesso'}
+                </span>
+            `
     }
 }
 
@@ -130,4 +167,15 @@ const showSweetAlert = options => {
             container: 'student-export-alert'
         }
     })
+}
+
+const setStatusAmounts = students => {
+    const quantitySuccess = students.filter(student => student.registration_status === 200)
+    const quantityInfo = students.filter(student => student.registration_status === 400)
+    const quantityError = students.filter(student => student.registration_status === 500)
+
+    $('[quantity-success]').text(`(${quantitySuccess.length})`)
+    $('[quantity-info]').text(`(${quantityInfo.length})`)
+    $('[quantity-error]').text(`(${quantityError.length})`)
+    $('[quantity-total]').text(`(${students.length})`)
 }

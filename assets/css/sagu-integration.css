@@ -22,6 +22,10 @@
     margin: 1.1em 1em 0em !important;
 }
 
+[selected-students-table] {
+    margin-bottom: 5px;
+}
+
 [selected-students-table] td:not(:last-child) {
     border-right: 1px solid #eee;
 }
@@ -46,9 +50,11 @@
     background-color: #dc3545;
 }
 
-[data-remodal-id="modal-exported-students"] {
+.modal-exported-students,
+.modal-enrolled-students {
     overflow: auto;
     max-height: 700px;
+    padding: 30px 0 0;
 }
 
 .enroll-students-btn {
@@ -116,4 +122,22 @@
 
 .modal-btns-enroll-students .btn {
     margin-left: 10px;
+}
+
+.export-infos {
+    float: right;
+    font-size: 0.75rem;
+}
+
+.export-infos-wrapper {
+    border-top: 1px solid #E0E0E0;
+    padding: 5px 30px 30px;
+    position: sticky;
+    bottom: -1px;
+    background-color: #F5F5F5;
+}
+
+[enrolled-students-wrapper],
+[selected-students-table-wrapper] {
+    padding: 0 30px 15px;
 }

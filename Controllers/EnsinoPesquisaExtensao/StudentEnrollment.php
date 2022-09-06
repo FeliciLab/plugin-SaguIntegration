@@ -41,23 +41,28 @@ class StudentEnrollment extends SaguIntegration
 
     public function POST_enrolledStudents()
     {
+        $app = App::i();
         $opportunity_id = intval($this->data["opportunityId"]);
-        $classId = intval($this->data["classId"]);
+        $class_id = intval($this->data["classId"]);
+        $opportunity = $app->repo("Opportunity")->find($opportunity_id);
+
+        if ($app->user->is('guest')) $app->auth->requireAuthentication();
+        $opportunity->checkPermission('@control');
 
         $this->registerIndividual($opportunity_id);
 
-        foreach ($this->students as $student) {
+        foreach ($this->students as $index => $student) {
             $aluno["cpf"] = $student["data"]["cpf"];
             $this->http_client_opts["json"] = $aluno;
 
             try {
-                $response = $this->http_client->request('POST', "ensino-pesquisa-extensao/turma/{$classId}/inscricao", $this->http_client_opts);
-                dump($response);
-                die;
+                $response = $this->http_client->request('POST', "ensino-pesquisa-extensao/turma/{$class_id}/inscricao", $this->http_client_opts);
+                $this->students[$index]["registration_status"] = $response->getStatusCode();
             } catch (ClientException $e) {
-                dump($e->getResponse());
-                die;
+                $this->students[$index]["registration_status"] = $e->getResponse()->getStatusCode();
             }
         }
+
+        $this->json($this->students);
     }
 }

@@ -39,8 +39,8 @@ class SaguIntegration extends \MapasCulturais\Controller
         $form_fields = json_decode($json);
 
         if ($app->user->is('guest')) $app->auth->requireAuthentication();
-
         $opportunity->checkPermission('@control');
+
         $opportunity->importFields($form_fields);
     }
 
@@ -51,8 +51,8 @@ class SaguIntegration extends \MapasCulturais\Controller
         $opportunity = $app->repo("Opportunity")->find($opportunity_id);
 
         if ($app->user->is('guest')) $app->auth->requireAuthentication();
-
         $opportunity->checkPermission('@control');
+
         $this->registerIndividual($opportunity_id);
         $this->json($this->students);
     }
@@ -75,9 +75,9 @@ class SaguIntegration extends \MapasCulturais\Controller
 
             try {
                 $response = $this->http_client->request('POST', 'person', $this->http_client_opts);
-                $students["status"] = $response->getStatusCode();
+                $students["export_status"] = $response->getStatusCode();
             } catch (ClientException $e) {
-                $students["status"] = $e->getResponse()->getStatusCode();
+                $students["export_status"] = $e->getResponse()->getStatusCode();
             }
 
             $this->students[] = $students;

@@ -13,3 +13,4 @@
 
 <?php $this->part('modals/exported-students'); ?>
 <?php $this->part('modals/students-enrollment'); ?>
+<?php $this->part('modals/enrolled-students'); ?>
