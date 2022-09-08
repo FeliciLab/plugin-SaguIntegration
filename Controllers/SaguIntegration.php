@@ -7,20 +7,62 @@ require PLUGINS_PATH . 'SaguIntegration/vendor/autoload.php';
 use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use MapasCulturais\App;
 use MapasCulturais\Entities\Registration;
 
 class SaguIntegration extends \MapasCulturais\Controller
 {
     private $infos = [];
+    private $opportunity_id;
     private $registration_id;
+
+    protected $http_client;
+    protected $http_client_opts;
+    protected $students = [];
+
+    function __construct()
+    {
+        $this->http_client = new Client(['base_uri' => env('BASE_URI_SAGU')]);
+        $this->http_client_opts = [
+            'headers' => [
+                'x-api-key' => env('X_API_KEY_SAGU')
+            ]
+        ];
+    }
+
+    public function POST_importForm()
+    {
+        $app = App::i();
+        $opportunity_id = intval($this->data["opportunity_id"]);
+        $opportunity = $app->repo("Opportunity")->find($opportunity_id);
+        $json = file_get_contents(PLUGINS_PATH . 'SaguIntegration/assets/js/sagu-form-fields.json');
+        $form_fields = json_decode($json);
+
+        if ($app->user->is('guest')) $app->auth->requireAuthentication();
+        $opportunity->checkPermission('@control');
+
+        $opportunity->importFields($form_fields);
+    }
 
     public function GET_selectedStudentData()
     {
         $app = App::i();
         $opportunity_id = intval($this->data["id"]);
+        $opportunity = $app->repo("Opportunity")->find($opportunity_id);
+
+        if ($app->user->is('guest')) $app->auth->requireAuthentication();
+        $opportunity->checkPermission('@control');
+
+        $this->registerIndividual($opportunity_id);
+        $this->json($this->students);
+    }
+
+    protected function registerIndividual($opportunity_id)
+    {
+        $app = App::i();
+        $this->opportunity_id = $opportunity_id;
         $registrations = $app->repo('Registration')->findBy(['opportunity' => $opportunity_id, 'status' => Registration::STATUS_APPROVED]);
-        $agents = [];
 
         foreach ($registrations as $registration) {
             $this->registration_id = $registration->id;
@@ -30,27 +72,17 @@ class SaguIntegration extends \MapasCulturais\Controller
 
             $students["data"] = $this->infos;
             $students["registration_number"] = $registration->number;
+            $this->http_client_opts["json"] = $this->infos;
 
             try {
-                $client = new Client(['base_uri' => env('BASE_URI_SAGU')]);
-
-                $options = [
-                    'headers' => [
-                        'x-api-key' => env('X_API_KEY_SAGU')
-                    ],
-                    'json' => $this->infos
-                ];
-
-                $response = $client->request('POST', 'person', $options);
-                $students["status"] = $response->getStatusCode();
-            } catch (ClientException $e) {
-                $students["status"] = $e->getResponse()->getStatusCode();
+                $response = $this->http_client->request('POST', 'person', $this->http_client_opts);
+                $students["export_status"] = $response->getStatusCode();
+            } catch (ClientException | ServerException $e) {
+                $students["export_status"] = $e->getResponse()->getStatusCode();
             }
 
-            array_push($agents, $students);
+            $this->students[] = $students;
         }
-
-        $this->json($agents);
     }
 
     private function mountDataSelectedStudents($agent_metas)
@@ -110,21 +142,8 @@ class SaguIntegration extends \MapasCulturais\Controller
     private function setProfessionalCategory()
     {
         $app = App::i();
-        $opportunity_id = intval($this->data["id"]);
-        $rfc = $app->repo('RegistrationFieldConfiguration')->findOneBy(['owner' => $opportunity_id, 'title' => 'Formação Profissional']);
+        $rfc = $app->repo('RegistrationFieldConfiguration')->findOneBy(['owner' => $this->opportunity_id, 'title' => 'Formação Profissional']);
         $rm = $app->repo('RegistrationMeta')->findOneBy(['owner' => $this->registration_id, 'key' => "field_$rfc->id"]);
-
         $this->infos["categoriaProfissional"] = $rm->value;
-    }
-
-    public function POST_importForm()
-    {
-        $app = App::i();
-        $opportunity_id = intval($this->data["opportunity_id"]);
-        $opportunity = $app->repo("Opportunity")->find($opportunity_id);
-        $json = file_get_contents(PLUGINS_PATH . 'SaguIntegration/assets/js/sagu-form-fields.json');
-        $form_fields = json_decode($json);
-
-        $opportunity->importFields($form_fields);
     }
 }
