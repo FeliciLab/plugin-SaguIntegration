@@ -5,6 +5,7 @@ namespace SaguIntegration\Controllers\EnsinoPesquisaExtensao;
 require PLUGINS_PATH . 'SaguIntegration/vendor/autoload.php';
 
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use MapasCulturais\App;
 use SaguIntegration\Controllers\SaguIntegration;
 
@@ -58,7 +59,7 @@ class StudentEnrollment extends SaguIntegration
             try {
                 $response = $this->http_client->request('POST', "ensino-pesquisa-extensao/turma/{$class_id}/inscricao", $this->http_client_opts);
                 $this->students[$index]["registration_status"] = $response->getStatusCode();
-            } catch (ClientException $e) {
+            } catch (ClientException | ServerException $e) {
                 $this->students[$index]["registration_status"] = $e->getResponse()->getStatusCode();
             }
         }

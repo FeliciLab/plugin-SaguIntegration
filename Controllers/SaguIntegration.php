@@ -7,6 +7,7 @@ require PLUGINS_PATH . 'SaguIntegration/vendor/autoload.php';
 use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use MapasCulturais\App;
 use MapasCulturais\Entities\Registration;
 
@@ -76,7 +77,7 @@ class SaguIntegration extends \MapasCulturais\Controller
             try {
                 $response = $this->http_client->request('POST', 'person', $this->http_client_opts);
                 $students["export_status"] = $response->getStatusCode();
-            } catch (ClientException $e) {
+            } catch (ClientException | ServerException $e) {
                 $students["export_status"] = $e->getResponse()->getStatusCode();
             }
 
