@@ -7,14 +7,14 @@
 
     <form>
         <div class="form-group">
-            <label for="">Defina uma oferta de <b>curso</b>:</label>
-            <select name="" id="select-course" class="select-course">
+            <label for="select-course">Defina uma oferta de <b>curso</b>:</label>
+            <select id="select-course" class="select-course">
                 <option id="select-course-opt"></option>
             </select>
         </div>
         <div class="form-group">
-            <label for="">Defina uma <b>turma</b>:</label>
-            <select name="" id="select-class" class="select-class">
+            <label for="select-class">Defina uma <b>turma</b>:</label>
+            <select id="select-class" class="select-class">
                 <option selected disabled>Selecione</option>
             </select>
         </div>
@@ -28,7 +28,7 @@
         <button type="button" data-remodal-action="close" class="btn btn-default">
             <?php \MapasCulturais\i::_e("Cancelar"); ?>
         </button>
-        <button type="button" class="btn btn-primary" id="btn-enroll-students-sagu">
+        <button type="button" class="btn btn-default" id="btn-enroll-students-sagu" disabled>
             <?php \MapasCulturais\i::_e("Matricular alunos"); ?>
         </button>
     </div>
