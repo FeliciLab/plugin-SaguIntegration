@@ -9,7 +9,7 @@ $(() => {
                 icon: 'success',
                 text: 'Formulário importado com sucesso',
                 showConfirmButton: false,
-                timer: 2000,
+                timer: 1500,
                 customClass: {
                     container: 'imported-form-alert'
                 }
@@ -17,7 +17,7 @@ $(() => {
 
             setTimeout(() => {
                 document.location.reload(true)
-            }, 2000)
+            }, 1500)
         })
     })
 })
